@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Gestion Commandes - TechZone</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <main>
+        <div class="flex-between" style="margin-bottom: 2rem;">
+            <h1>Gestion des Commandes</h1>
+            <a th:href="@{/admin/dashboard}" class="btn btn-outline">Retour au dashboard</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Total</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orders.content}">
+                            <td th:text="'#' + ${order.id}"></td>
+                            <td th:text="${#temporals.format(order.date, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${order.userEmail}"></td>
+                            <td th:text="${#numbers.formatDecimal(order.total, 0, 2)} + ' €'"></td>
+                            <td>
+                                <span class="product-status" 
+                                      th:classappend="${order.statut.name() == 'LIVREE'} ? 'status-in-stock' : 
+                                                      (${order.statut.name() == 'EXPEDIEE'} ? 'status-in-stock' : 
+                                                      (${order.statut.name() == 'CONFIRMEE'} ? 'status-in-stock' : 'status-rupture'))"
+                                      th:text="${order.statut}"></span>
+                            </td>
+                            <td>
+                                <a th:href="@{'/admin/orders/' + ${order.id}}" class="btn btn-sm btn-primary">Détails</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="pagination" th:if="${orders.totalPages > 1}">
+            <a th:if="${currentPage > 0}" th:href="@{/admin/orders(page=${currentPage - 1})}">Précédent</a>
+            <span th:each="i : ${#numbers.sequence(0, orders.totalPages - 1)}"
+                  th:if="${i == currentPage || i == 0 || i == orders.totalPages - 1 || (i >= currentPage - 2 && i <= currentPage + 2)}">
+                <a th:if="${i != currentPage}" th:href="@{/admin/orders(page=${i})}" th:text="${i + 1}"></a>
+                <span th:if="${i == currentPage}" class="active" th:text="${i + 1}"></span>
+            </span>
+            <a th:if="${currentPage < orders.totalPages - 1}" th:href="@{/admin/orders(page=${currentPage + 1})}">Suivant</a>
+        </div>
+    </main>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

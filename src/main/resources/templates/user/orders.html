@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Mes Commandes - TechZone</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <main>
+        <h1 style="margin-bottom: 2rem;">Mes Commandes</h1>
+        
+        <div th:if="${orders.totalElements > 0}" class="card">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Numéro</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orders.content}">
+                            <td th:text="'#' + ${order.id}"></td>
+                            <td th:text="${#temporals.format(order.date, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td>
+                                <span class="product-status" 
+                                      th:classappend="${order.statut.name() == 'LIVREE'} ? 'status-in-stock' : 
+                                                      (${order.statut.name() == 'EXPEDIEE'} ? 'status-in-stock' : 
+                                                      (${order.statut.name() == 'CONFIRMEE'} ? 'status-in-stock' : 'status-rupture'))"
+                                      th:text="${order.statut}"></span>
+                            </td>
+                            <td th:text="${#numbers.formatDecimal(order.total, 0, 2)} + ' €'"></td>
+                            <td>
+                                <a th:href="@{'/user/orders/' + ${order.id}}" class="btn btn-sm btn-primary">Détails</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div th:if="${orders.totalElements == 0}" class="card">
+            <div class="card-body text-center">
+                <h2 style="margin-bottom: 1rem;">Aucune commande</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Vous n'avez pas encore passé de commande.</p>
+                <a th:href="@{/products}" class="btn btn-primary">Découvrir le catalogue</a>
+            </div>
+        </div>
+        
+        <div class="pagination" th:if="${orders.totalPages > 1}">
+            <a th:if="${currentPage > 0}" th:href="@{/user/orders(page=${currentPage - 1})}">Précédent</a>
+            <span th:each="i : ${#numbers.sequence(0, orders.totalPages - 1)}"
+                  th:if="${i == currentPage || i == 0 || i == orders.totalPages - 1 || (i >= currentPage - 2 && i <= currentPage + 2)}">
+                <a th:if="${i != currentPage}" th:href="@{/user/orders(page=${i})}" th:text="${i + 1}"></a>
+                <span th:if="${i == currentPage}" class="active" th:text="${i + 1}"></span>
+            </span>
+            <a th:if="${currentPage < orders.totalPages - 1}" th:href="@{/user/orders(page=${currentPage + 1})}">Suivant</a>
+        </div>
+    </main>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

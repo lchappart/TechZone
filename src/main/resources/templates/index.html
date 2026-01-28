@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">TechZone - Accueil</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <main>
+        <div class="hero">
+            <h1>Bienvenue sur TechZone</h1>
+            <p>Votre destination pour les produits high-tech de qualité</p>
+            <a th:href="@{/products}" class="btn btn-primary" style="background: white; color: var(--primary-color);">
+                Découvrir le catalogue
+            </a>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Pourquoi choisir TechZone ?</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                        <h3>Produits de qualité</h3>
+                        <p style="color: var(--text-secondary);">Une sélection rigoureuse des meilleurs produits high-tech</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">💳</div>
+                        <h3>Paiement sécurisé</h3>
+                        <p style="color: var(--text-secondary);">Transactions sécurisées et protection de vos données</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
+                        <h3>Livraison rapide</h3>
+                        <p style="color: var(--text-secondary);">Expédition sous 24h pour tous nos produits</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+                        <h3>Support client</h3>
+                        <p style="color: var(--text-secondary);">Une équipe à votre écoute 7j/7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

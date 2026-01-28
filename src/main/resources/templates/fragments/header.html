@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <header>
+        <nav>
+            <a th:href="@{/}" class="logo">
+                <span>🛒</span> TechZone
+            </a>
+            <ul class="nav-links">
+                <li><a th:href="@{/}">Accueil</a></li>
+                <li><a th:href="@{/products}">Catalogue</a></li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}">Connexion</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/register}">Inscription</a>
+                </li>
+                <li>
+                    <a th:href="@{/cart}">Panier</a>
+                </li>
+                <li sec:authorize="hasAnyRole('USER', 'ADMIN')">
+                    <a th:href="@{/user/orders}">Mes Commandes</a>
+                </li>
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/dashboard}">Admin</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-sm btn-outline" style="color: white; border-color: white;">
+                            Déconnexion
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+</body>
+</html>

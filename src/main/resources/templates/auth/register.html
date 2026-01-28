@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Inscription - TechZone</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <main>
+        <div class="card" style="max-width: 400px; margin: 4rem auto;">
+            <div class="card-header">
+                <h2 style="text-align: center;">Inscription</h2>
+            </div>
+            <div class="card-body">
+                <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+                <form th:action="@{/register}" method="post" th:object="${registerRequest}">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" th:field="*{email}" class="form-control" required autocomplete="email">
+                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger" style="margin-top: 0.25rem; font-size: 0.875rem;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mot de passe (min. 8 caractères)</label>
+                        <input type="password" th:field="*{password}" class="form-control" required minlength="8" autocomplete="new-password">
+                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger" style="margin-top: 0.25rem; font-size: 0.875rem;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nom</label>
+                        <input type="text" th:field="*{nom}" class="form-control" required autocomplete="family-name">
+                        <p th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="text-danger" style="margin-top: 0.25rem; font-size: 0.875rem;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Prénom</label>
+                        <input type="text" th:field="*{prenom}" class="form-control" required autocomplete="given-name">
+                        <p th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}" class="text-danger" style="margin-top: 0.25rem; font-size: 0.875rem;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Adresse (optionnel)</label>
+                        <input type="text" th:field="*{adresse}" class="form-control" autocomplete="street-address">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">S'inscrire</button>
+                </form>
+                <p style="text-align: center; margin-top: 1rem;">
+                    Déjà un compte ? <a th:href="@{/login}">Connectez-vous</a>
+                </p>
+            </div>
+        </div>
+    </main>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
