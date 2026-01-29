@@ -39,6 +39,9 @@ public class Product {
     @Column(nullable = false)
     private Boolean promotion = false;
     
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
+    
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderLine> orderLines = new ArrayList<>();
     

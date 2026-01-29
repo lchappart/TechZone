@@ -54,6 +54,11 @@
                         <label class="form-label">Description</label>
                         <textarea id="product-description" class="form-control" rows="3"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label class="form-label">URL image (Pixabay ou autre)</label>
+                        <input type="url" id="product-image-url" class="form-control" placeholder="https://cdn.pixabay.com/photo/...">
+                        <small style="color: var(--text-muted); font-size: 0.8125rem;">Optionnel. Sinon une image par défaut selon la catégorie sera utilisée.</small>
+                    </div>
                     <button type="submit" class="btn btn-primary">Créer le produit</button>
                 </form>
             </div>
@@ -116,13 +121,15 @@
         function createProduct(event) {
             event.preventDefault();
             
+            const imageUrlEl = document.getElementById('product-image-url');
             const product = {
                 nom: document.getElementById('product-name').value,
                 description: document.getElementById('product-description').value,
                 prix: parseFloat(document.getElementById('product-price').value),
                 categoryId: parseInt(document.getElementById('product-category').value),
                 stockStatus: document.getElementById('product-stock').value,
-                promotion: document.getElementById('product-promotion').checked
+                promotion: document.getElementById('product-promotion').checked,
+                imageUrl: imageUrlEl && imageUrlEl.value.trim() ? imageUrlEl.value.trim() : null
             };
             
             fetch('/api/admin/products', {
@@ -135,36 +142,43 @@
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Produit créé avec succès');
-                    location.reload();
+                    showToast('Produit créé avec succès', 'success');
+                    setTimeout(() => location.reload(), 800);
                 } else {
-                    response.json().then(data => alert('Erreur: ' + (data.message || 'Impossible de créer le produit')));
+                    response.json().then(data => showToast('Erreur: ' + (data.message || 'Impossible de créer le produit'), 'error'));
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Erreur lors de la création du produit');
+                showToast('Erreur lors de la création du produit', 'error');
             });
         }
         
         function deleteProduct(id) {
-            if (!confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) return;
-            
-            fetch(`/api/admin/products/${id}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Produit supprimé avec succès');
-                    location.reload();
-                } else {
-                    alert('Erreur lors de la suppression');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Erreur lors de la suppression');
+            showConfirm({
+                title: 'Supprimer le produit',
+                message: 'Êtes-vous sûr de vouloir supprimer ce produit ?',
+                confirmLabel: 'Supprimer',
+                cancelLabel: 'Annuler',
+                danger: true
+            }).then(ok => {
+                if (!ok) return;
+                fetch(`/api/admin/products/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        showToast('Produit supprimé avec succès', 'success');
+                        setTimeout(() => location.reload(), 800);
+                    } else {
+                        showToast('Erreur lors de la suppression', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Erreur lors de la suppression', 'error');
+                });
             });
         }
     </script>

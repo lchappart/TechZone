@@ -87,36 +87,43 @@
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Catégorie créée avec succès');
-                    location.reload();
+                    showToast('Catégorie créée avec succès', 'success');
+                    setTimeout(() => location.reload(), 800);
                 } else {
-                    response.json().then(data => alert('Erreur: ' + (data.message || 'Impossible de créer la catégorie')));
+                    response.json().then(data => showToast('Erreur: ' + (data.message || 'Impossible de créer la catégorie'), 'error'));
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Erreur lors de la création de la catégorie');
+                showToast('Erreur lors de la création de la catégorie', 'error');
             });
         }
         
         function deleteCategory(id) {
-            if (!confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) return;
-            
-            fetch(`/api/admin/categories/${id}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Catégorie supprimée avec succès');
-                    location.reload();
-                } else {
-                    response.json().then(data => alert('Erreur: ' + (data.message || 'Impossible de supprimer la catégorie')));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Erreur lors de la suppression');
+            showConfirm({
+                title: 'Supprimer la catégorie',
+                message: 'Êtes-vous sûr de vouloir supprimer cette catégorie ?',
+                confirmLabel: 'Supprimer',
+                cancelLabel: 'Annuler',
+                danger: true
+            }).then(ok => {
+                if (!ok) return;
+                fetch(`/api/admin/categories/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        showToast('Catégorie supprimée avec succès', 'success');
+                        setTimeout(() => location.reload(), 800);
+                    } else {
+                        response.json().then(data => showToast('Erreur: ' + (data.message || 'Impossible de supprimer la catégorie'), 'error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Erreur lors de la suppression', 'error');
+                });
             });
         }
     </script>

@@ -48,7 +48,10 @@
         <div class="products-grid" th:if="${products.totalElements > 0}">
             <div class="product-card" th:each="product : ${products.content}">
                 <div class="product-image">
-                    <span th:text="${product.categoryName.charAt(0)}"></span>
+                    <img th:src="${product.imageUrl}" th:alt="${product.nom}" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                         loading="lazy">
+                    <span class="product-image-fallback" style="display: none;" th:text="${product.categoryName.charAt(0)}"></span>
                 </div>
                 <div class="product-info">
                     <h3 class="product-name" th:text="${product.nom}"></h3>

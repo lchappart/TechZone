@@ -30,4 +30,7 @@ public class ProductCreateDTO {
     private Product.StockStatus stockStatus;
     
     private Boolean promotion = false;
+    
+    @Size(max = 500, message = "L'URL de l'image ne peut pas dépasser 500 caractères")
+    private String imageUrl;
 }

@@ -95,17 +95,24 @@
                 if (response.ok) {
                     location.reload();
                 } else {
-                    alert('Erreur lors de la mise à jour de la quantité');
+                    showToast('Erreur lors de la mise à jour de la quantité', 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Erreur lors de la mise à jour de la quantité');
+                showToast('Erreur lors de la mise à jour de la quantité', 'error');
             });
         }
         
         function removeFromCart(productId) {
-            if (confirm('Êtes-vous sûr de vouloir retirer ce produit du panier ?')) {
+            showConfirm({
+                title: 'Retirer du panier',
+                message: 'Êtes-vous sûr de vouloir retirer ce produit du panier ?',
+                confirmLabel: 'Retirer',
+                cancelLabel: 'Annuler',
+                danger: true
+            }).then(ok => {
+                if (!ok) return;
                 fetch(`/api/cart/remove/${productId}`, {
                     method: 'DELETE',
                     credentials: 'include'
@@ -114,14 +121,14 @@
                     if (response.ok) {
                         location.reload();
                     } else {
-                        alert('Erreur lors de la suppression du produit');
+                        showToast('Erreur lors de la suppression du produit', 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Erreur lors de la suppression du produit');
+                    showToast('Erreur lors de la suppression du produit', 'error');
                 });
-            }
+            });
         }
     </script>
 </body>

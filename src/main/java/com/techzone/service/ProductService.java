@@ -65,6 +65,7 @@ public class ProductService {
         product.setCategory(category);
         product.setStockStatus(dto.getStockStatus());
         product.setPromotion(dto.getPromotion() != null ? dto.getPromotion() : false);
+        product.setImageUrl(dto.getImageUrl() != null && !dto.getImageUrl().isBlank() ? dto.getImageUrl().trim() : null);
         
         product = productRepository.save(product);
         return ProductDTO.fromEntity(product);
@@ -84,6 +85,7 @@ public class ProductService {
         product.setCategory(category);
         product.setStockStatus(dto.getStockStatus());
         product.setPromotion(dto.getPromotion() != null ? dto.getPromotion() : false);
+        product.setImageUrl(dto.getImageUrl() != null && !dto.getImageUrl().isBlank() ? dto.getImageUrl().trim() : null);
         
         product = productRepository.save(product);
         return ProductDTO.fromEntity(product);
